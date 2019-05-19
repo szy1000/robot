@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-1.11.3.js"></script>
+    <script>
+        $(function () {
+            var url=[];
+            var $img = $(".left img");
+            var sta = true;
+            for(var i=0; i<$img.length; i++){
+                url.push($img.eq(i).attr("src"))
+            }
+            $(".left").on("click", "img", function() {
+                var src = $(this).attr("src")
+                $(".content img").attr("src", src)
+            })
+            $(".left").scroll(function () {
+                var top = $(".left").scrollTop();
+                var num = Math.floor(top/100);
+                $(".content img").attr("src", url[num])
+            })
+            $(".icon").click(function () {
+                if(sta){
+                    $(".left").animate({width: "0px"}, 100)
+                    sta = false
+                }else {
+                    $(".left").animate({width: "180px"}, 100)
+                    sta = true
+                }
+            })
+
+            $('#files').change(function (e) {
+                let reader = new FileReader()
+                reader.readAsDataURL(e.target.files[0])
+                reader.onload = function (event) {
+                    $('.img-wrapper').append("<img src=" + reader.result + " alt=" + reader.name +"/>")
+                    $(".content img").attr("src", reader.result)
+                };
+
+            })
+
+            $('.control .release').click(function () {
+                let cureWidth = $('.content img').width()
+                $('.content img').width(cureWidth * 0.9)
+            })
+
+            $('.control .add').click(function () {
+                let cureWidth = $('.content img').width()
+                $('.content img').width(cureWidth * 1.1)
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left pull-left">
+            <div class="img-wrapper">
+                <img src="./images/tibet-1.jpg" alt="">
+                <img src="./images/tibet-2.jpg" alt="">
+                <img src="./images/tibet-3.jpg" alt="">
+                <img src="./images/tibet-4.jpg" alt="">
+            </div>
+            <div class="add"><input type="file" id="files" /></div>
+        </div>
+        <div class="content">
+            <img src="./images/tibet-1.jpg" alt="">
+            <span></span>
+            <i class="icon"></i>
+            <div class="control">
+                <span class="release">-</span>
+                <span class="add">+</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
